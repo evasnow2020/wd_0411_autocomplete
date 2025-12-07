@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autocompletar Colores</title>
+
+    <!-- jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI Library -->
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+    />
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 40px;
+        background-color: #f9f9f9;
+      }
+
+      .container {
+        max-width: 850px;
+        margin: 0 auto;
+      }
+
+      #message {
+        background-color: #fffbea;
+        border: 1px solid #e6db74;
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #333;
+        border-radius: 4px;
+        display: none;
+      }
+
+      #autocompletar {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+      }
+
+      #autocompletar:focus {
+        outline: none;
+        border-color: #a8c23a;
+      }
+
+      .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        font-size: 14px;
+      }
+
+      .ui-menu-item {
+        padding: 8px 12px;
+      }
+
+      .ui-state-active {
+        background-color: #a8c23a;
+        border-color: #a8c23a;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="message"></div>
+      <input
+        type="text"
+        id="autocompletar"
+        placeholder="Empieza a escribir..."
+      />
+    </div>
+
+    <script>
+      var x;
+      x = $(document);
+      x.ready(iniciar);
+
+      function iniciar() {
+        var coincidencias = [
+          "Azul",
+          "Verde",
+          "Amarillo",
+          "Rojo",
+          "Purpura",
+          "Naranja",
+        ];
+
+        x = $("#autocompletar");
+        x.autocomplete({
+          source: function (request, response) {
+            var term = request.term.toLowerCase();
+            var results = coincidencias.filter(function (item) {
+              return item.toLowerCase().indexOf(term) !== -1;
+            });
+            response(results);
+          },
+          minLength: 1,
+          open: function (event, ui) {
+            var menu = $(this).autocomplete("widget");
+            var len = menu.find("li").length;
+            $("#message")
+              .text(
+                len +
+                  " results are available, use up and down arrow keys to navigate"
+              )
+              .fadeIn(200);
+          },
+          close: function () {
+            $("#message").fadeOut(200);
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
